@@ -16,10 +16,10 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 
 
-const razorInstance = new Razorpay({
-  key_id : process.env.RAZORPAY_API_KEY,
-  key_secret : process.env.RAZORPAY_SECRET_KEY
-})
+// const razorInstance = new Razorpay({
+//   key_id : process.env.RAZORPAY_API_KEY,
+//   key_secret : process.env.RAZORPAY_SECRET_KEY
+// })
 
 
 app.use(express.json());
