@@ -69,39 +69,15 @@ const ConfirmOrder = ({ history }) => {
       config
     ).then((info) => {
       console.log(info)
-      const options = {
-        key: 'rzp_test_cRvayq4By0Llod',
-        name: user.name,
-        description: cartItems,
-        order_id: info.data.id,
-        prefill: {
-          name: user.name,
-          email:user.email
-        },
-        handler: function (response) {
-          localStorage.clear();
-          dispatch(createOrder(order));
-          history.push("/success");
-          alert.success("Your order succesfully placed")
-        },
-        theme: {
-          "color": "#3399cc"
-        }
-      };
+      // TODO : Add the payment gateway here
+      localStorage.clear();
       order.paymentInfo = {
-        id: options.order_id,
+        id: Math.random().toString(36).substring(2, 15),
         status: "succeeded",
       };
-
-      const rzp1 = new window.Razorpay(options);
-      rzp1.on('payment.failed', function (response) {
-        alert(response.error.description, response.error.reason);
-      })
-      rzp1.on('payment.success', ()=> {
-
-      })
-      rzp1.open();
-
+      dispatch(createOrder(order));
+      history.push("/success");
+      alert.success("Your order succesfully placed")
 
     }).catch((err) => {
       console.log(err)

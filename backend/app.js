@@ -45,10 +45,11 @@ app.post("/api/v1/razorpay/order",(req,res)=>{
     payment_capture: 0, //1
   };
   console.log(req.body)
-  razorInstance.orders.create(options,function(err,order){
-    res.status(200).json(order)
-    console.log(order)
-  })
+  res.status(200).json(options)
+  // razorInstance.orders.create(options,function(err,order){
+  //   res.status(200).json(order)
+  //   console.log(order)
+  // })
 })
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
