@@ -7,6 +7,7 @@ import {
   getOrderDetails,
   clearErrors,
   updateOrder,
+  receivedItem,
 } from "../../actions/orderAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
@@ -27,7 +28,13 @@ const ProcessOrder = ({ history, match }) => {
 
     myForm.set("status", status);
 
-    dispatch(updateOrder(match.params.id, myForm));
+    if (status === "Received") {
+      dispatch(receivedItem(match.params.id, myForm));
+      history.push("/admin/orders");
+    }
+    else{
+      dispatch(updateOrder(match.params.id, myForm));
+    }
   };
 
   const dispatch = useDispatch();
@@ -64,7 +71,7 @@ const ProcessOrder = ({ history, match }) => {
             <div
               className="confirmOrderPage"
               style={{
-                display: order.orderStatus === "Delivered" ? "block" : "grid",
+                display: order.orderStatus === "Received" ? "block" : "grid",
               }}
             >
               <div>
@@ -119,7 +126,7 @@ const ProcessOrder = ({ history, match }) => {
                     <div>
                       <p
                         className={
-                          order.orderStatus && order.orderStatus === "Delivered"
+                          order.orderStatus && order.orderStatus === "Received"
                             ? "greenColor"
                             : "redColor"
                         }
@@ -151,7 +158,7 @@ const ProcessOrder = ({ history, match }) => {
               {/*  */}
               <div
                 style={{
-                  display: order.orderStatus === "Delivered" ? "none" : "block",
+                  display: order.orderStatus === "Received" ? "none" : "block",
                 }}
               >
                 <form
@@ -170,6 +177,10 @@ const ProcessOrder = ({ history, match }) => {
 
                       {order.orderStatus === "Shipped" && (
                         <option value="Delivered">Delivered</option>
+                      )}
+
+                      {order.orderStatus === "Delivered" && (
+                        <option value="Received">Received</option>
                       )}
                     </select>
                   </div>

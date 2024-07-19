@@ -91,7 +91,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
   if (req.body.status === "Shipped") {
     order.orderItems.forEach(async (o) => {
-      await updateStock(o.product, o.quantity);
+      await reduceStock(o.product, o.quantity);
     });
   }
   order.orderStatus = req.body.status;
@@ -106,13 +106,44 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-async function updateStock(id, quantity) {
+async function reduceStock(id, quantity) {
   const product = await Product.findById(id);
 
   product.Stock -= quantity;
 
   await product.save({ validateBeforeSave: false });
 }
+
+async function increaseStock(id, quantity) {
+  const product = await Product.findById(id);
+
+  product.Stock += quantity;
+
+  await product.save({ validateBeforeSave: false });
+}
+
+// received rental item -- Admin
+exports.receivedItem = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new ErrorHander("Order not found with this Id", 404));
+  }
+
+  order.receivedAt = Date.now();
+  order.orderStatus = "Received";
+  order.orderItems.forEach(async (o) => {
+    await increaseStock(o.product, o.quantity);
+  });
+  
+  await order.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+
 
 // delete Order -- Admin
 exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
