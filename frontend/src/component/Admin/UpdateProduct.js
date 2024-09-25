@@ -21,7 +21,6 @@ const UpdateProduct = ({ history, match }) => {
   const alert = useAlert();
 
   const { error, product } = useSelector((state) => state.productDetails);
-
   const {
     loading,
     error: updateError,
@@ -103,6 +102,7 @@ const UpdateProduct = ({ history, match }) => {
     images.forEach((image) => {
       myForm.append("images", image);
     });
+
     dispatch(updateProduct(productId, myForm));
   };
 
@@ -119,17 +119,17 @@ const UpdateProduct = ({ history, match }) => {
       reader.onload = () => {
         if (reader.readyState === 2) {
           setImagesPreview((old) => [...old, reader.result]);
-          setImages((old) => [...old, reader.result]);
         }
       };
 
       reader.readAsDataURL(file);
+      setImages((old) => [...old, file]);
     });
   };
 
   return (
     <Fragment>
-      <MetaData title="Create Product" />
+      <MetaData title="Update Product" />
       <div className="dashboard">
         <SideBar />
         <div className="newProductContainer">

@@ -57,7 +57,6 @@ const NewProduct = ({ history }) => {
     e.preventDefault();
 
     const myForm = new FormData();
-
     myForm.set("name", name);
     myForm.set("price", price);
     myForm.set("description", description);
@@ -67,27 +66,15 @@ const NewProduct = ({ history }) => {
     images.forEach((image) => {
       myForm.append("images", image);
     });
+
     dispatch(createProduct(myForm));
   };
 
   const createProductImagesChange = (e) => {
     const files = Array.from(e.target.files);
 
-    setImages([]);
-    setImagesPreview([]);
-
-    files.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((old) => [...old, reader.result]);
-          setImages((old) => [...old, reader.result]);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    });
+    setImages(files); // Store file objects directly
+    setImagesPreview(files.map(file => URL.createObjectURL(file))); // Create previews using URL.createObjectURL
   };
 
   return (
@@ -137,7 +124,7 @@ const NewProduct = ({ history }) => {
 
             <div>
               <AccountTreeIcon />
-              <select onChange={(e) => setCategory(e.target.value)}>
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Choose Category</option>
                 {categories.map((cate) => (
                   <option key={cate} value={cate}>
@@ -153,6 +140,7 @@ const NewProduct = ({ history }) => {
                 type="number"
                 placeholder="Stock"
                 required
+                value={Stock}
                 onChange={(e) => setStock(e.target.value)}
               />
             </div>
@@ -160,13 +148,12 @@ const NewProduct = ({ history }) => {
             <div id="createProductFormFile">
               <input
                 type="file"
-                name="avatar"
+                name="images"
                 accept="image/*"
                 onChange={createProductImagesChange}
                 multiple
               />
             </div>
-
 
             <div id="createProductFormImage">
               {imagesPreview.map((image, index) => (
