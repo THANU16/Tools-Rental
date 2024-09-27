@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "THe tools rental backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/THANU16/Tools-Rental.git"
+  },
+  "author": "Thanushanth Kanagarajah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/THANU16/Tools-Rental/issues"
+  },
+  "homepage": "https://github.com/THANU16/Tools-Rental#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.6.4"
+  }
+}
